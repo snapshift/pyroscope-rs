@@ -19,39 +19,6 @@ jobs:
         with:
           name: "linux.gem"
           path: pyroscope_ffi/ruby/pkg/*.gem
-  macos-build:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - macos-version: "11.0"
-            target: x86_64-apple-darwin
-            mk-arch: amd64
-          - macos-version: "11.0"
-            target: aarch64-apple-darwin
-            mk-arch: arm64
-    name: macOS - ${{ matrix.target }}
-    runs-on: macos-${{ matrix.macos-version }}
-
-    env:
-      RUST_TARGET: ${{ matrix.target }}
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: 1.76.0
-          target: ${{ matrix.target }}
-          profile: minimal
-          override: true
-      - run: make gem/mac/${{ matrix.mk-arch }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.sha }}
-          path: pyroscope_ffi/ruby/pkg/*.gem
 
   linux-test:
     strategy:
